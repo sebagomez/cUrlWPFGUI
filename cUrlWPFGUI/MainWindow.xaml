@@ -6,7 +6,25 @@
         xmlns:local="clr-namespace:cUrlWPFGUI"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="100"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<Label Grid.Row="0" Grid.Column="0">Method</Label>
+		<ComboBox Name="Method" Grid.Row="0" Grid.Column="1" >
+			<ListBoxItem Content="GET"/>
+			<ListBoxItem Content="POST"/>
+		</ComboBox>
+		<Label Grid.Row="1" Grid.Column="0">Url</Label>
+		<TextBox Name="Url" Grid.Row="1" Grid.Column="1"  />
+		<Label Grid.Row="2" Grid.Column="0">Body</Label>
+		<TextBox Name="Body"  Grid.Row="2" Grid.Column="2"/>
+		
+	</Grid>
 </Window>
