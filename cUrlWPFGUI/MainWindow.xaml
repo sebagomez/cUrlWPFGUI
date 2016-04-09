@@ -5,11 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:cUrlWPFGUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="350" Width="525" x:Name="Main">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="100"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
@@ -20,11 +27,42 @@
 		<ComboBox Name="Method" Grid.Row="0" Grid.Column="1" >
 			<ListBoxItem Content="GET"/>
 			<ListBoxItem Content="POST"/>
+			<ListBoxItem Content="PUT"/>
+			<ListBoxItem Content="PATCH"/>
+			<ListBoxItem Content="DELETE"/>
 		</ComboBox>
 		<Label Grid.Row="1" Grid.Column="0">Url</Label>
 		<TextBox Name="Url" Grid.Row="1" Grid.Column="1"  />
 		<Label Grid.Row="2" Grid.Column="0">Body</Label>
 		<TextBox Name="Body"  Grid.Row="2" Grid.Column="2"/>
-		
+		<Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">Headers</Label>
+		<DataGrid Name="GridHeaders" Grid.Row="3" Grid.Column="2" AutoGenerateColumns="False" ItemsSource="{Binding}" DataContext="Headers" IsReadOnly="True" >
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Name" Binding="{Binding Name}" ></DataGridTextColumn>
+				<DataGridTextColumn Header="Value" Binding="{Binding Path=Value}" ></DataGridTextColumn>
+				<DataGridTemplateColumn>
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<Button Click="RemoveHeader_Click">Remove</Button>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>		
+			</DataGrid.Columns>
+		</DataGrid>
+		<Grid  Grid.Row="4" Grid.Column="1" >
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="150"/>
+			</Grid.ColumnDefinitions>
+			<TextBox Grid.Column="0" Name="HeaderName" ></TextBox>
+			<TextBox Grid.Column="1"  Name="HeaderValue" ></TextBox>
+			<Button Grid.Column="2" Click="AddHeader_Click" >Add Header</Button>
+		</Grid>
+		<CheckBox Name="ChkJson" Grid.Column="1" Grid.Row="5">JSON Content-Type</CheckBox>
+		<CheckBox Name="ChkSelfSigne" Grid.Column="1" Grid.Row="6">Accept self-signed certs</CheckBox>
+		<CheckBox Name="ChkVerbose"  Grid.Column="1" Grid.Row="7">Verbose</CheckBox>
+		<RichTextBox Name="Output" Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="2"/>
+		<Button Name="Go" Grid.Row="9" Click="Go_Click">Go</Button>
 	</Grid>
 </Window>
