@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
+using System.Threading;
 
 namespace cUrlWPFGUI.Utils
 {
@@ -20,7 +21,6 @@ namespace cUrlWPFGUI.Utils
 		public bool Run()
 		{
 			bool ret;
-			string value;
 			using (Process proc = new Process())
 			{
 				proc.StartInfo.CreateNoWindow = true;
@@ -31,15 +31,58 @@ namespace cUrlWPFGUI.Utils
 				proc.StartInfo.FileName = @"C:\ProgramData\chocolatey\bin\curl.exe";
 				proc.StartInfo.Arguments = GetArguments();
 
-				proc.Start();
-				string standardError = proc.StandardError.ReadToEnd();
-				value = proc.StandardOutput.ReadToEnd();
-				proc.WaitForExit();
 
-				ret = proc.ExitCode == 0;
+				StringBuilder output = new StringBuilder();
+				StringBuilder error = new StringBuilder();
 
-				Output = value;
-				Status = standardError;
+				using (AutoResetEvent outputWaitHandle = new AutoResetEvent(false))
+				using (AutoResetEvent errorWaitHandle = new AutoResetEvent(false))
+				{
+					proc.OutputDataReceived += (sender, e) => {
+						if (e.Data == null)
+						{
+							outputWaitHandle.Set();
+						}
+						else
+						{
+							output.AppendLine(e.Data);
+						}
+					};
+					proc.ErrorDataReceived += (sender, e) =>
+					{
+						if (e.Data == null)
+						{
+							errorWaitHandle.Set();
+						}
+						else
+						{
+							error.AppendLine(e.Data);
+						}
+					};
+
+					proc.Start();
+
+					proc.BeginOutputReadLine();
+					proc.BeginErrorReadLine();
+
+					int timeout = 5000;
+
+					if (proc.WaitForExit(timeout) &&
+						outputWaitHandle.WaitOne(timeout) &&
+						errorWaitHandle.WaitOne(timeout))
+					{
+						Output = output.ToString();
+						Status = error.ToString();
+					}
+					else
+					{
+						// Timed out.
+						proc.Close();
+					}
+
+					ret = proc.ExitCode == 0;
+
+				}
 			}
 
 			return ret;
@@ -58,13 +101,13 @@ namespace cUrlWPFGUI.Utils
 
 			arguments.Append($"-X{Method} ");
 			foreach (Header header in Headers)
-				arguments.Append($"-H '{header.Name}:{header.Value}' ");
+				arguments.Append($"-H {header.Name}:{header.Value} ");
 
 			if (JsonContent)
-				arguments.Append($"-H 'Content-type:application/json' ");
+				arguments.Append($"-H Content-type:application/json ");
 
 			if (!string.IsNullOrWhiteSpace(Body))
-				arguments.Append($"-d '{Body}' ");
+				arguments.Append($"-d {Body.Replace("\"", @"\""")} ");
 
 			arguments.Append($"{Url}");
 
