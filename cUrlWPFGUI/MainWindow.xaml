@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:cUrlWPFGUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525" x:Name="Main">
-	<Grid>
+        Title="cURL GUI" Height="600" Width="800" x:Name="Main" Icon="Resources/curl.png" ResizeMode="CanResizeWithGrip" MinWidth="800" MinHeight="600">
+	<Grid Margin="5,0">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="100"/>
+			<RowDefinition MinHeight="100" Height="Auto" MaxHeight="200"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
@@ -24,7 +24,7 @@
 			<ColumnDefinition Width="*"/>
 		</Grid.ColumnDefinitions>
 		<Label Grid.Row="0" Grid.Column="0">Method</Label>
-		<ComboBox Name="Method" Grid.Row="0" Grid.Column="1" >
+		<ComboBox Name="Method" Grid.Row="0" Grid.Column="1" Margin="0,5" >
 			<ListBoxItem Content="GET"/>
 			<ListBoxItem Content="POST"/>
 			<ListBoxItem Content="PUT"/>
@@ -32,11 +32,11 @@
 			<ListBoxItem Content="DELETE"/>
 		</ComboBox>
 		<Label Grid.Row="1" Grid.Column="0">Url</Label>
-		<TextBox Name="Url" Grid.Row="1" Grid.Column="1"  />
+		<TextBox Name="Url" Grid.Row="1" Grid.Column="1" Height="22" Margin="0,5"  />
 		<Label Grid.Row="2" Grid.Column="0">Body</Label>
-		<TextBox Name="Body"  Grid.Row="2" Grid.Column="2"/>
+		<TextBox Name="Body"  Grid.Row="2" Grid.Column="2" Height="100" Margin="0,5"/>
 		<Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">Headers</Label>
-		<DataGrid Name="GridHeaders" Grid.Row="3" Grid.Column="2" AutoGenerateColumns="False" ItemsSource="{Binding}" DataContext="Headers" IsReadOnly="True" >
+		<DataGrid Name="GridHeaders" Grid.Row="3" Grid.Column="2" AutoGenerateColumns="False" ItemsSource="{Binding}" DataContext="Headers" IsReadOnly="True" Margin="0,5" MinColumnWidth="30" MaxHeight="200" >
 			<DataGrid.Columns>
 				<DataGridTextColumn Header="Name" Binding="{Binding Name}" ></DataGridTextColumn>
 				<DataGridTextColumn Header="Value" Binding="{Binding Path=Value}" ></DataGridTextColumn>
@@ -49,20 +49,20 @@
 				</DataGridTemplateColumn>		
 			</DataGrid.Columns>
 		</DataGrid>
-		<Grid  Grid.Row="4" Grid.Column="1" >
+		<Grid  Grid.Row="4" Grid.Column="1" Margin="0,5" >
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*"/>
 				<ColumnDefinition Width="*"/>
 				<ColumnDefinition Width="150"/>
 			</Grid.ColumnDefinitions>
-			<TextBox Grid.Column="0" Name="HeaderName" ></TextBox>
-			<TextBox Grid.Column="1"  Name="HeaderValue" ></TextBox>
-			<Button Grid.Column="2" Click="AddHeader_Click" >Add Header</Button>
+			<TextBox Grid.Column="0" Name="HeaderName" Margin="0,0,5,0" ></TextBox>
+			<TextBox Grid.Column="1"  Name="HeaderValue" Margin="0,0,5,0" ></TextBox>
+			<Button Grid.Column="2" Click="AddHeader_Click" Height="22" >Add Header</Button>
 		</Grid>
-		<CheckBox Name="ChkJson" Grid.Column="1" Grid.Row="5">JSON Content-Type</CheckBox>
-		<CheckBox Name="ChkSelfSigne" Grid.Column="1" Grid.Row="6">Accept self-signed certs</CheckBox>
+		<CheckBox Name="ChkJson" Grid.Column="1" Grid.Row="5" Margin="0,5">JSON Content-Type</CheckBox>
+		<CheckBox Name="ChkSelfSigne" Grid.Column="1" Grid.Row="6" Margin="0,5">Accept self-signed certs</CheckBox>
 		<CheckBox Name="ChkVerbose"  Grid.Column="1" Grid.Row="7">Verbose</CheckBox>
-		<RichTextBox Name="Output" Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="2"/>
-		<Button Name="Go" Grid.Row="9" Click="Go_Click">Go</Button>
+		<RichTextBox Name="Output" Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="2" Margin="0,5"/>
+		<Button Name="Go" Grid.Row="9" Click="Go_Click" Height="22" Margin="0,5">Go</Button>
 	</Grid>
 </Window>

@@ -16,6 +16,7 @@ namespace cUrlWPFGUI
 			InitializeComponent();
 
 			GridHeaders.DataContext = Headers;
+			Method.SelectedIndex = 0;
 		}
 
 		private void Go_Click(object sender, RoutedEventArgs e)

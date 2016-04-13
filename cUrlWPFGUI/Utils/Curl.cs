@@ -17,6 +17,8 @@ namespace cUrlWPFGUI.Utils
 		public bool Verbose { get; set; }
 		public string Output { get; set; }
 		public string Status { get; set; }
+		public int TimeOut { get; set; } = 30;
+
 
 		public bool Run()
 		{
@@ -38,7 +40,8 @@ namespace cUrlWPFGUI.Utils
 				using (AutoResetEvent outputWaitHandle = new AutoResetEvent(false))
 				using (AutoResetEvent errorWaitHandle = new AutoResetEvent(false))
 				{
-					proc.OutputDataReceived += (sender, e) => {
+					proc.OutputDataReceived += (sender, e) => 
+					{
 						if (e.Data == null)
 						{
 							outputWaitHandle.Set();
@@ -65,7 +68,7 @@ namespace cUrlWPFGUI.Utils
 					proc.BeginOutputReadLine();
 					proc.BeginErrorReadLine();
 
-					int timeout = 5000;
+					int timeout = TimeOut * 1000;
 
 					if (proc.WaitForExit(timeout) &&
 						outputWaitHandle.WaitOne(timeout) &&
@@ -77,7 +80,10 @@ namespace cUrlWPFGUI.Utils
 					else
 					{
 						// Timed out.
+						proc.CancelErrorRead();
+						proc.CancelOutputRead();
 						proc.Close();
+						return false;
 					}
 
 					ret = proc.ExitCode == 0;
