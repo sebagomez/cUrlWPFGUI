@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows;
 using cUrlWPFGUI.Utils;
 
@@ -17,24 +18,33 @@ namespace cUrlWPFGUI
 
 			GridHeaders.DataContext = Headers;
 			Method.SelectedIndex = 0;
+			Url.DataContext = HistoryManager.GetHistory();
 		}
 
 		private void Go_Click(object sender, RoutedEventArgs e)
 		{
-			Output.Document.Blocks.Clear();
+			try
+			{
+				Output.Document.Blocks.Clear();
 
-			Curl curl = new Curl();
-			curl.Method = Method.Text;
-			curl.Url = Url.Text;
-			curl.Body = Body.Text;
-			curl.Headers = Headers;
-			curl.JsonContent = ChkJson.IsChecked.HasValue ? ChkJson.IsChecked.Value : false;
-			curl.AcceptSelfSignedCerts = ChkSelfSigne.IsChecked.HasValue ? ChkSelfSigne.IsChecked.Value : false;
-			curl.Verbose = ChkVerbose.IsChecked.HasValue ? ChkVerbose.IsChecked.Value : false;
+				Curl curl = new Curl();
+				curl.Method = Method.Text;
+				curl.Url = Url.Text;
+				curl.Body = Body.Text;
+				curl.Headers = Headers;
+				curl.JsonContent = ChkJson.IsChecked.HasValue ? ChkJson.IsChecked.Value : false;
+				curl.AcceptSelfSignedCerts = ChkSelfSigne.IsChecked.HasValue ? ChkSelfSigne.IsChecked.Value : false;
+				curl.Verbose = ChkVerbose.IsChecked.HasValue ? ChkVerbose.IsChecked.Value : false;
 
-			curl.Run();
+				curl.Run();
 
-			Output.AppendText(curl.Output);
+				HistoryManager.Add(Url.Text);
+				Output.AppendText(curl.Output);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(this, ex.Message, ":(", MessageBoxButton.OK, MessageBoxImage.Error);
+			}
 		}
 
 		private void AddHeader_Click(object sender, RoutedEventArgs e)

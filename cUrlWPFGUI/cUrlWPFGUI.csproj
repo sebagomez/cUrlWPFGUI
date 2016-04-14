@@ -38,6 +38,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -58,6 +59,8 @@
     </ApplicationDefinition>
     <Compile Include="Utils\Curl.cs" />
     <Compile Include="Utils\Header.cs" />
+    <Compile Include="Utils\HistoryManager.cs" />
+    <Compile Include="Utils\LowerStringEqualityComparer.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
